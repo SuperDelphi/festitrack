@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <HelloWorld msg="Test" />
+    <h1>Login</h1>
 </template>
 
 <style scoped>
