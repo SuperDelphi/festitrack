@@ -1,9 +1,15 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+<script setup lang='ts'>
 </script>
 
 <template>
-  <HelloWorld msg="Test" />
+  <nav>
+    <RouterLink to='/'>Home</RouterLink>
+    <RouterLink to='/login'>Connexion</RouterLink>
+  </nav>
+  
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <style scoped>
