@@ -24,7 +24,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
-    <form @submit.preven="handleLogin">
+    <form @submit.prevent="handleLogin">
         <div>
             <h1>Connexion</h1>
             <p>Saisissez votre adresse mail pour recevoir un lien de connexion</p>
