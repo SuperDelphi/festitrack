@@ -1,16 +1,14 @@
 <script setup lang='ts'>
+import BottomBar from './components/BottomBar.vue';
+import { useRoute } from 'vue-router';
+const route = useRoute()
 </script>
 
 <template>
-  <nav>
-    <RouterLink to='/'>Home</RouterLink>
-    <RouterLink to='/login'>Connexion</RouterLink>
-    <RouterLink to='/account'>Mon compte</RouterLink>
-  </nav>
-  
-  <main>
-    <RouterView />
-  </main>
+    <main>
+      <RouterView />
+    </main>
+    <BottomBar v-if='route.meta.showBottomBar' />
 </template>
 
 <style scoped>

@@ -7,17 +7,20 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: HomeView
+            component: HomeView,
+            meta: { showBottomBar: true }
         },
         {
             path: '/login',
             name: 'login',
-            component: () => import('../views/Login.vue')
+            component: () => import('../views/Login.vue'),
+            meta: { showBottomBar: false }
         },
         {
             path: '/account',
             name: 'account',
-            component: () => import('../views/Account.vue')
+            component: () => import('../views/Account.vue'),
+            meta: { showBottomBar: true }
         }
     ]
 })

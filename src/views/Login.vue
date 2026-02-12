@@ -30,6 +30,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
+    <img src='/logo_full.svg' />
     <form @submit.prevent="handleLogin">
         <div>
             <h1>Connexion</h1>
