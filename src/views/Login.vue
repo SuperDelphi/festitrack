@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { supabase } from '../supabase'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const loading = ref(false)
 const email = ref('')
+const password = ref('')
 
 const handleLogin = async () => {
     try {
         loading.value = true
-        const { error } = await supabase.auth.signInWithOtp({
+        const { error } = await supabase.auth.signInWithPassword({
             email: email.value,
+            password: password.value
         })
         if (error) throw error
-        alert('Ouvrez votre boîte mail et cliquez sur le lien de connexion !')
+        console.log(await supabase.auth.getSession())
+        alert('Connexion réussie !')
+        router.push('/')
     } catch (error) {
         if (error instanceof Error) {
             alert(error.message)
@@ -27,9 +33,10 @@ const handleLogin = async () => {
     <form @submit.prevent="handleLogin">
         <div>
             <h1>Connexion</h1>
-            <p>Saisissez votre adresse mail pour recevoir un lien de connexion</p>
             <div>
                 <input required type="email" placeholder="exemple@domaine.com" v-model="email" />
+                <br>
+                <input required type="password" placeholder="Mot de passe" v-model="password" />
             </div>
             <div>
                 <input
