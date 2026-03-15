@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "types:update": "npx supabase gen types typescript --project-id \"dtelwrwgxrucmxbcuhqa\" --schema public > src/types/database.types.ts",
     "preview": "vite preview"
   },
   "dependencies": {

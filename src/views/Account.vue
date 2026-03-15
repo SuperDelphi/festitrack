@@ -60,9 +60,9 @@ async function signOut() {
 </script>
 
 <template>
-    <div>
-        <h1>{{ firstName }} {{ lastName }}</h1>
-        <p>Rôle : {{ role }}(trice)</p>
+    <div class='flex flex-col items-center p-6 max-h-screen bg-white'>
+        <h1 class='text-3xl font-bold mb-1'>{{ firstName }} {{ lastName }}</h1>
+        <h2 class='text-xl text-gray-400 font-bold mb-8 uppercase'>{{ role }}</h2>
         <button @click="signOut" :disabled="loading">Se déconnecter</button>
     </div>
 </template>

@@ -17,6 +17,12 @@ const router = createRouter({
             meta: { showBottomBar: false }
         },
         {
+            path: '/mediation',
+            name: 'mediation',
+            component: () => import('../views/Mediation.vue'),
+            meta: { showBottomBar: true }
+        },
+        {
             path: '/account',
             name: 'account',
             component: () => import('../views/Account.vue'),

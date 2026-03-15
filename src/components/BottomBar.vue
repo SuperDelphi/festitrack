@@ -12,7 +12,7 @@ import profileIcon from '../assets/profile_bar_icon.svg'
           <img :src='counterIcon' class='w-12 h-12 mb-1' />
           <span class='text-lg text-black'>Compteur</span>
         </RouterLink>
-        <RouterLink to='/login' class='grayscale inline-flex flex-col items-center justify-center px-5 group'>
+        <RouterLink to='/mediation' class='grayscale inline-flex flex-col items-center justify-center px-5 group'>
           <img :src='mediationIcon' class='w-12 h-12 mb-1' />
           <span class='text-lg text-black'>Médiation</span>
         </RouterLink>
