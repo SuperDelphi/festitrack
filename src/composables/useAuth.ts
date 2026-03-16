@@ -8,14 +8,24 @@ const userProfile = ref<any | null>(null)
 const isReady = ref(false)
 
 export function useAuth() {
+    const loadProfile = async (userId: string) => {
+        const { data, error } = await supabase
+            .from('Users')
+            .select('*, Locations (*), Roles (*)')
+            .eq('id', userId)
+            .maybeSingle()
+
+        if (!error) userProfile.value = data
+
+        return data
+    }
+
     const init = async () => {
         const { data: { session } } = await supabase.auth.getSession()
         sessionUser.value = session?.user || null
 
-        if (sessionUser.value) {
-            const { data } = await supabase.from('Users').select('*, Locations (*), Roles (*)').eq('id', sessionUser.value.id).maybeSingle()
-            userProfile.value = data
-        }
+        if (sessionUser.value) await loadProfile(sessionUser.value.id)
+
         isReady.value = true
     }
 
@@ -23,6 +33,7 @@ export function useAuth() {
         sessionUser: readonly(sessionUser),
         userProfile: readonly(userProfile),
         isReady: readonly(isReady),
+        loadProfile,
         init
     }
 }

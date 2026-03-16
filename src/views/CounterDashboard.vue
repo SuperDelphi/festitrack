@@ -120,7 +120,7 @@ async function populateDashboard() {
             <!-- Actuel -->
             <div class='flex flex-col items-center flex-1'>
                 <span class='font-bold'>Actuel</span>
-                <span class='text-6xl font-bold text-[#2bb385] my-1'>{{ currentCount }}</span>
+                <span :class='"text-6xl font-bold my-1 " + (currentCount >= userProfile?.Locations?.max_capacity ? "text-red-500" : "text-[#2bb385]")'>{{ currentCount }}</span>
                 <span class='font-bold'>/ {{ userProfile?.Locations?.max_capacity || 0 }}</span>
             </div>
             
@@ -130,7 +130,7 @@ async function populateDashboard() {
             <!-- Total jour -->
             <div class='flex flex-col items-center flex-1'>
                 <span class='font-bold'>Total jour</span>
-                <span class='text-6xl font-bold my-1'>{{ cumulateCount }}</span>
+                <span class='text-6xl font-bold my-1'>{{ cumulateCount || 0 }}</span>
                 <span class='font-bold'>Cumulatif</span>
             </div>
         </div>
