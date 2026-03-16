@@ -1,6 +1,7 @@
 import { ref, readonly } from 'vue'
 import { supabase } from '../supabase'
 import type { User as AuthUser } from '@supabase/supabase-js'
+import router from '../router'
 
 // État global partagé
 const sessionUser = ref<AuthUser | null>(null)
@@ -25,7 +26,8 @@ export function useAuth() {
         sessionUser.value = session?.user || null
 
         if (sessionUser.value) await loadProfile(sessionUser.value.id)
-
+        else router.push('/login')
+    
         isReady.value = true
     }
 

@@ -71,7 +71,7 @@ input {
 
 input[type="email"], input[type="password"] {
     background-color: #e6e6e6;
-    padding: 0.5rem 0.75rem;
+    padding: 0.75rem 1rem;
 }
 
 input::placeholder {

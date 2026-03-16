@@ -68,7 +68,9 @@ async function incrementCount() {
 }
 
 async function decrementCount() {
-    try {
+    if (currentCount.value <= 0) return
+
+    try {        
         if (!userProfile.value || !userProfile.value.Locations) {
             alert('Vous n\'avez pas de lieu assigné. Veuillez choisir un lieu dans votre profil.')
         }
@@ -96,7 +98,7 @@ async function setLocationStatus(isOpen: boolean) {
 
 async function populateDashboard() {
     try {
-        if (userProfile?.value.Locations?.id) {
+        if (userProfile.value?.Locations?.id) {
             await Promise.all([
                 fetchCurrentCount(userProfile.value.Locations.id),
                 fetchCumulateCount(userProfile.value.Locations.id)
@@ -140,7 +142,7 @@ async function populateDashboard() {
     
         <!-- Boutons d'action -->
         <div class='flex w-full max-w-sm gap-4 mt-6'>
-            <button @click='decrementCount' class='flex-1 py-3 flex flex-col items-center justify-center border-2 border-black rounded-[25px] hover:bg-gray-50 active:scale-95 transition-all'>
+            <button @click='decrementCount' class='flex-1 py-3 flex flex-col items-center justify-center border-2 border-black rounded-[25px] hover:bg-gray-50 active:scale-95 transition-all' :disabled="currentCount <= 0">
                 <img :src='minusIcon' class='h-4' />
                 <span class='text-xl font-bold'>Sortie</span>
             </button>
@@ -153,4 +155,8 @@ async function populateDashboard() {
 </template>
 
 <style scoped>
+:disabled {
+    cursor: not-allowed;
+    opacity: 0.33;
+}
 </style>

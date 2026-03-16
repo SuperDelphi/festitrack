@@ -1,11 +1,15 @@
-@import 'tailwindcss';
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+@import 'tailwindcss';
 
 @theme {
   --color-brand-primary: #ff6428;
   --color-brand-secondary: #ffcd45;
 
   --font-display: 'Dosis', sans-serif;
+}
+
+html, body {
+  touch-action: manipulation;
 }
 
 body {
