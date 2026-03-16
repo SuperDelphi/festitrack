@@ -2,47 +2,12 @@
 import { supabase } from '../supabase'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
 
 const router = useRouter()
 
-const user: any = ref(null)
-const loading = ref(true)
-const firstName = ref('')
-const lastName = ref('')
-const role = ref('')
-
-onMounted(async () => {
-    await getProfile()
-})
-
-async function getProfile() {
-    try {
-        loading.value = true
-
-        const { data: sessionData } = await supabase.auth.getSession()
-        if (sessionData.session) {
-            user.value = sessionData.session.user
-        }
-
-        const { data, error, status } = await supabase
-            .from('Users')
-            .select(`first_name, last_name, role_id`)
-            .eq('id', user.value.id)
-            .single()
-        
-        if (error && status !== 406) throw error
-
-        if (data) {
-            firstName.value = data.first_name
-            lastName.value = data.last_name
-            role.value = data.role_id
-        }
-    } catch (error: any) {
-        alert(error.message)
-    } finally {
-        loading.value = false
-    }
-}
+const { userProfile } = useAuth()
+const loading = ref(false)
 
 async function signOut() {
     try {
@@ -61,8 +26,8 @@ async function signOut() {
 
 <template>
     <div class='flex flex-col items-center p-6 max-h-screen bg-white'>
-        <h1 class='text-3xl font-bold mb-1'>{{ firstName }} {{ lastName }}</h1>
-        <h2 class='text-xl text-gray-400 font-bold mb-8 uppercase'>{{ role }}</h2>
+        <h1 class='text-3xl font-bold mb-1'>{{ userProfile?.first_name }} {{ userProfile?.last_name }}</h1>
+        <h2 class='text-xl text-gray-400 font-bold mb-8 uppercase'>{{ userProfile?.role_id }}</h2>
         <button @click="signOut" :disabled="loading">Se déconnecter</button>
     </div>
 </template>
