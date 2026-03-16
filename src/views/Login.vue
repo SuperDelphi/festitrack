@@ -17,7 +17,6 @@ const handleLogin = async () => {
         })
         if (error) throw error
         console.log(await supabase.auth.getSession())
-        alert('Connexion réussie !')
         router.push('/')
     } catch (error) {
         if (error instanceof Error) {
