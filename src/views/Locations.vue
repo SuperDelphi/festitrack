@@ -49,7 +49,7 @@ onMounted(async () => {
 
 <template>
     <div class='flex flex-col items-center p-6 max-h-screen bg-white'>
-        <h1 class='text-3xl font-bold mb-1'>Sélection</h1>
+        <h1 class='text-3xl font-bold mb-1'>Sélection du lieu</h1>
         <h2 class='text-xl text-gray-400 font-bold mb-8 uppercase'>{{ locations.length }} lieux disponibles</h2>
     </div>
     <div>
