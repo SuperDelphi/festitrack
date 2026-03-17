@@ -1,4 +1,4 @@
-import { ref, readonly } from 'vue'
+import { ref, readonly, onMounted, onUnmounted } from 'vue'
 import { supabase } from '../supabase'
 import type { User as AuthUser } from '@supabase/supabase-js'
 import router from '../router'
@@ -63,12 +63,31 @@ export function useAuth() {
         })
     }
 
+    const handleVisibilityChange = () => {
+        if (document.visibilityState === 'visible') {
+            console.log('App is visible, refreshing session...')
+            init()
+        }
+    }
+
+    const setupVisibilityListener = () => {
+        onMounted(() => {
+            document.addEventListener('visibilitychange', handleVisibilityChange)
+            document.addEventListener('focus', handleVisibilityChange)
+        })
+        onUnmounted(() => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange)
+            document.removeEventListener('focus', handleVisibilityChange)
+        })
+    }
+
     return {
         sessionUser: readonly(sessionUser),
         userProfile: readonly(userProfile),
         isReady: readonly(isReady),
         loadProfile,
         updateProfileLocation,
+        setupVisibilityListener,
         init,
     }
 }

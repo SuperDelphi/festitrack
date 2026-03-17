@@ -138,7 +138,6 @@ const subscribeToCount = () => {
         .channel('public:Occupancy_Logs')
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Occupancy_Logs', filter: `location_id=eq.${userProfile.value?.assigned_location}`},
             (payload) => {
-                console.log('Nouveau log :', payload.new)
                 if (payload.new.user_id === userProfile.value?.id) return // Ignorer les changements provenant de l'utilisateur actuel
                 currentCount.value = Math.max(0, currentCount.value + payload.new.change)
                 if (payload.new.change > 0) {

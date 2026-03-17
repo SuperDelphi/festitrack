@@ -28,6 +28,8 @@ async function signOut() {
     <div class='flex flex-col items-center p-6 max-h-screen bg-white'>
         <h1 class='text-3xl font-bold mb-1'>{{ userProfile?.first_name }} {{ userProfile?.last_name }}</h1>
         <h2 class='text-xl text-gray-400 font-bold mb-8 uppercase'>{{ userProfile?.role_id }}</h2>
-        <button @click="signOut" :disabled="loading">Se déconnecter</button>
+        <button @click="signOut" :disabled="loading" class='flex-1 py-1 mb-6 px-8 flex flex-col items-center justify-center border-gray-300 border-2 rounded-[25px] active:scale-95 transition-all'>
+            <span class='text-xl font-bold'>Se déconnecter</span>
+        </button>
     </div>
 </template>
