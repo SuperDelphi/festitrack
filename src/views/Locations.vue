@@ -19,11 +19,9 @@ async function getLocations() {
         const { data, error } = await supabase
         .from('Locations')
         .select('*, Users!assigned_location(id, first_name)')
-        // TODO: Filtrer les lieux en fonction de l'utilisateur connecté
+        .order('name', { ascending: true })
 
         if (error) throw error
-
-        console.log('Fetched locations:', data)
 
         locations.value = data || []
     } finally {
@@ -60,7 +58,7 @@ onMounted(async () => {
             <li v-for='location in locations' :key='location.id' class='px-5 py-3 border-3 border-[#eaeaea] rounded-[15px] mb-2 overflow-hidden shadow-xs active:scale-95 transition-all'>
                 <button @click='selectLocation(location.id)' class='w-full flex justify-center items-left flex-col'>
                     <div class='flex justify-between items-center w-full'>
-                        <span class='text-xl font-bold'>{{ location.name }}</span>
+                        <span class='text-xl font-bold truncate'>{{ location.name }}</span>
                         <img :src='arrowIcon' class='h-4' />
                     </div>
                     <div v-if='location.Users.length > 0' class='text-left mt-2'>

@@ -36,7 +36,6 @@ export function useAuth() {
 
         if (error) {
             console.error('Error updating profile location:', error)
-            router.push('/login')
             return { error }
         }
         

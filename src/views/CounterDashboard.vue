@@ -3,7 +3,7 @@ import minusIcon from '../assets/minus_icon.svg'
 import plusIcon from '../assets/plus_icon.svg'
 
 import { supabase } from '../supabase'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuth } from '../composables/useAuth'
 import router from '../router'
 
@@ -11,12 +11,21 @@ const { userProfile } = useAuth()
 const currentCount = ref(0)
 const cumulateCount = ref(0)
 const loading = ref(true)
+let realtimeChannel: any = null
 
 onMounted(async () => {
     await populateDashboard()
 
     if (!userProfile.value?.Locations) {
         router.push('/locations')
+    }
+
+    subscribeToCount()
+})
+
+onUnmounted(() => {
+    if (realtimeChannel) {
+        supabase.removeChannel(realtimeChannel)
     }
 })
 
@@ -123,6 +132,23 @@ async function populateDashboard() {
         loading.value = false
     }
 }
+
+const subscribeToCount = () => {
+    realtimeChannel = supabase
+        .channel('public:Occupancy_Logs')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Occupancy_Logs', filter: `location_id=eq.${userProfile.value?.assigned_location}`},
+            (payload) => {
+                console.log('Nouveau log :', payload.new)
+                if (payload.new.user_id === userProfile.value?.id) return // Ignorer les changements provenant de l'utilisateur actuel
+                currentCount.value = Math.max(0, currentCount.value + payload.new.change)
+                if (payload.new.change > 0) {
+                    cumulateCount.value += payload.new.change
+                }
+            }
+        )
+        .subscribe()
+}
+
 </script>
 
 <template>
