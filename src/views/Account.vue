@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { supabase } from '../supabase'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 

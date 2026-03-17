@@ -27,6 +27,12 @@ const router = createRouter({
             name: 'account',
             component: () => import('../views/Account.vue'),
             meta: { showBottomBar: true }
+        },
+        {
+            path: '/locations',
+            name: 'locations',
+            component: () => import('../views/Locations.vue'),
+            meta: { showBottomBar: false }
         }
     ]
 })

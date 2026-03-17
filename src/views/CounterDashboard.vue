@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-// Assets
 import minusIcon from '../assets/minus_icon.svg'
 import plusIcon from '../assets/plus_icon.svg'
 
@@ -8,7 +7,7 @@ import { ref, onMounted } from 'vue'
 import { useAuth } from '../composables/useAuth'
 
 // TODO: Demander à l'utilisateur de sélectionner le lieu si aucun lieu assigné
-const { sessionUser, userProfile } = useAuth()
+const { userProfile } = useAuth()
 const currentCount = ref(0)
 const cumulateCount = ref(0)
 const loading = ref(true)

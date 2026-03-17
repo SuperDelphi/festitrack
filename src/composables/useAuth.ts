@@ -21,6 +21,29 @@ export function useAuth() {
         return data
     }
 
+    const updateProfileLocation = async (locationId: number | null) => {
+        if (!sessionUser.value) {
+            router.push('/login')
+            return { error: 'User not authenticated'}
+        }
+
+        const { data, error } = await supabase
+            .from('Users')
+            .update({ assigned_location: locationId })
+            .eq('id', userProfile.value.id)
+            .select('*, Locations (*), Roles (*)')
+            .single()
+
+        if (error) {
+            console.error('Error updating profile location:', error)
+            return { error }
+        }
+        
+        userProfile.value = data
+
+        return { data }
+    }
+
     const init = async () => {
         const { data: { session } } = await supabase.auth.getSession()
         sessionUser.value = session?.user || null
@@ -36,6 +59,7 @@ export function useAuth() {
         userProfile: readonly(userProfile),
         isReady: readonly(isReady),
         loadProfile,
-        init
+        updateProfileLocation,
+        init,
     }
 }
