@@ -36,6 +36,7 @@ export function useAuth() {
 
         if (error) {
             console.error('Error updating profile location:', error)
+            router.push('/login')
             return { error }
         }
         
@@ -52,6 +53,15 @@ export function useAuth() {
         else router.push('/login')
     
         isReady.value = true
+
+        // Redirige automatiquement vers le login si la session est expirée ou invalide
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_OUT') {
+                sessionUser.value = null
+                userProfile.value = null
+                router.push('/login')
+            }
+        })
     }
 
     return {

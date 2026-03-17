@@ -7,7 +7,6 @@ import { ref, onMounted } from 'vue'
 import { useAuth } from '../composables/useAuth'
 import router from '../router'
 
-// TODO: Demander à l'utilisateur de sélectionner le lieu si aucun lieu assigné
 const { userProfile } = useAuth()
 const currentCount = ref(0)
 const cumulateCount = ref(0)
@@ -51,7 +50,6 @@ async function incrementCount() {
     if (loading.value) return
     loading.value = true
 
-    console.log('Incrementing count for location:', userProfile.value?.Locations?.name)
     try {
         if (!userProfile.value || !userProfile.value.Locations) {
             alert('Vous n\'avez pas de lieu assigné. Veuillez choisir un lieu dans votre profil.')
@@ -118,7 +116,6 @@ async function populateDashboard() {
                 fetchCurrentCount(userProfile.value.Locations.id),
                 fetchCumulateCount(userProfile.value.Locations.id)
             ])
-            console.log('3. Counts fetched - Current:', currentCount.value, 'Cumulative:', cumulateCount.value)
         }
     } catch (error: any) {
         console.error(error)
@@ -133,6 +130,11 @@ async function populateDashboard() {
         <h1 class='text-3xl font-bold mb-8'>{{ userProfile?.Locations?.name || 'Lieu non assigné' }}</h1>
 
         <template v-if='userProfile?.Locations'>
+
+            <RouterLink to='/locations' class='flex-1 py-1 mb-6 px-8 flex flex-col items-center justify-center border-gray-300 border-2 rounded-[25px] active:scale-95 transition-all'>
+                <span class='text-xl font-bold'>Changer de lieu</span>
+            </RouterLink>
+            
             <!-- Encart sur fond gris -->
             <div class='w-full max-w-sm p-8 rounded-[25px] bg-gray-100 flex justify-between items-center relative overflow-hidden'>
                 <!-- Actuel -->
@@ -154,7 +156,7 @@ async function populateDashboard() {
             </div>
 
             <!-- Bouton d'ouverture/fermeture du lieu -->
-            <button v-if='userProfile?.Roles?.is_admin' class='w-full max-w-sm mt-8 py-2 border-2 border-red-300 bg-red-50 text-red-600 font-bold rounded-full hover:bg-red-100 active:scale-95 transition-all'>Déclarer la fermeture du lieu</button>
+            <!-- <button v-if='userProfile?.Roles?.is_admin' class='w-full max-w-sm mt-8 py-2 border-2 border-red-300 bg-red-50 text-red-600 font-bold rounded-full hover:bg-red-100 active:scale-95 transition-all'>Déclarer la fermeture du lieu</button> -->
         
             <!-- Boutons d'action -->
             <div class='flex w-full max-w-sm gap-4 mt-6'>

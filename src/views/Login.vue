@@ -9,7 +9,7 @@ const loading = ref(false)
 const email = ref('')
 const password = ref('')
 
-const { loadProfile } = useAuth()
+const { loadProfile, init } = useAuth()
 
 const handleLogin = async () => {
     try {
@@ -20,6 +20,7 @@ const handleLogin = async () => {
         })
         if (error) throw error
         
+        await init()
         await loadProfile(data.user.id)
         router.push('/')
     } catch (error) {
