@@ -5,6 +5,8 @@ import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import { useAuth } from '../composables/useAuth'
 
+import PopUp from '../components/PopUp.vue'
+
 import arrowIcon from '../assets/arrow_icon.svg'
 
 const router = useRouter()
@@ -12,6 +14,10 @@ const router = useRouter()
 const { userProfile, updateProfileLocation } = useAuth()
 const locations = ref<any[]>([])
 const loading = ref(false)
+
+const showPopUp = ref(false)
+const popUpMessage = ref('')
+const locId = ref<number | null>(null)
 
 async function getLocations() {
     try {
@@ -42,6 +48,34 @@ async function selectLocation(locationId: number) {
     }
 }
 
+async function askLocation(locationId: number) {
+    locId.value = locationId
+
+    let locationUsers = locations.value.find((loc: any) => loc.id === locationId)?.Users || []
+    locationUsers = locationUsers.filter((u: any) => u.id !== userProfile.value?.id)
+
+    if (locationUsers.length === 0) {
+        selectLocation(locationId)
+        return
+    }
+
+    popUpMessage.value = 'Ce lieu est actuellement assigné à ' + locationUsers.map((u: any) => u.first_name).join(', ') + '. Vous pouvez continuer, mais si vous n\'êtes pas sur place, merci de ne pas utiliser le compteur !'
+    showPopUp.value = true
+}
+
+function closePopUp() {
+    showPopUp.value = false
+    locId.value = null
+}
+
+function confirmPopUp() {
+    if (locId.value) {
+        selectLocation(locId.value)
+    }
+    showPopUp.value = false
+    locId.value = null
+}
+
 onMounted(async () => {
     await getLocations();
 })
@@ -49,6 +83,7 @@ onMounted(async () => {
 </script>
 
 <template>
+    <PopUp v-if='showPopUp' title='Attention' :message='popUpMessage' :close='closePopUp' :action='confirmPopUp' />
     <div class='flex flex-col items-center p-6 max-h-screen bg-white'>
         <h1 class='text-3xl font-bold mb-1'>Sélection du lieu</h1>
         <!-- <h2 class='text-xl text-gray-400 font-bold mb-8 uppercase'>{{ locations.length }} lieux disponibles</h2> -->
@@ -56,7 +91,7 @@ onMounted(async () => {
     <div>
         <ul class='max-w-md mx-auto p-6'>
             <li v-for='location in locations' :key='location.id' class='px-5 py-3 border-3 border-[#eaeaea] rounded-[15px] mb-2 overflow-hidden shadow-xs active:scale-95 transition-all'>
-                <button @click='selectLocation(location.id)' class='w-full flex justify-center items-left flex-col'>
+                <button @click='askLocation(location.id)' class='w-full flex justify-center items-left flex-col'>
                     <div class='flex justify-between items-center w-full'>
                         <span class='text-xl font-bold truncate'>{{ location.name }}</span>
                         <img :src='arrowIcon' class='h-4' />

@@ -1,4 +1,4 @@
-import type { Database, Tables } from './database.types'
+import type { Database } from './database.types'
 
 // Aliases for Tables
 export type User = Database['public']['Tables']['Users']['Row']

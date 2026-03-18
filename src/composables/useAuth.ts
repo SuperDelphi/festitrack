@@ -54,7 +54,7 @@ export function useAuth() {
         isReady.value = true
 
         // Redirige automatiquement vers le login si la session est expirée ou invalide
-        supabase.auth.onAuthStateChange((event, session) => {
+        supabase.auth.onAuthStateChange((event) => {
             if (event === 'SIGNED_OUT') {
                 sessionUser.value = null
                 userProfile.value = null
