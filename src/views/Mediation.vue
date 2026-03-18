@@ -31,7 +31,7 @@ async function getWorks() {
 
 const formatText = (text: string) => {
     if (!text) return ''
-    return text.replace(/\n/g, '<br class="block my-1" />')
+    return text.replace(/\n/g, '<br class="block my-2" />')
 }
 
 onMounted(async () => {
@@ -46,6 +46,7 @@ onMounted(async () => {
     </div>
     <div>
         <ul class='max-w-md mx-auto p-6'>
+            <span v-if='works.length === 0' class='text-lg text-gray-500'>Aucune fiche de médiation disponible pour ce lieu.</span>
             <li v-for='work in works' :key='work.id' class='px-5 py-3 border-3 border-[#eaeaea] rounded-[15px] mb-2 overflow-hidden shadow-xs'>
                 <div class='w-full flex justify-center items-left flex-col'>
                     <div class='flex justify-between items-left w-full flex-col text-left'>

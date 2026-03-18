@@ -24,7 +24,7 @@ async function getLocations() {
         loading.value = true
         const { data, error } = await supabase
         .from('Locations')
-        .select('*, Users!assigned_location(id, first_name)')
+        .select('*, Users!assigned_location(id, first_name, last_name)')
         .order('name', { ascending: true })
 
         if (error) throw error
@@ -97,7 +97,7 @@ onMounted(async () => {
                         <img :src='arrowIcon' class='h-4' />
                     </div>
                     <div v-if='location.Users.length > 0' class='text-left mt-2'>
-                        <span v-for="user in location.Users" :key="user.id" :class='"font-bold inline-block py-1 px-2 mr-1 " + (user.id === userProfile?.id ? "bg-[#4e5dff] text-white" : "bg-[#88b3fc22] text-[#88b3fc]") + " rounded-lg"'>{{ user.first_name }}</span>
+                        <span v-for="user in location.Users" :key="user.id" :class='"font-bold inline-block py-1 px-2 mr-1 " + (user.id === userProfile?.id ? "bg-[#4e5dff] text-white" : "bg-[#88b3fc22] text-[#88b3fc]") + " rounded-lg"'>{{ user.first_name + ' ' + user.last_name.toUpperCase()[0] + '.' }}</span>
                     </div>
                 </button>
             </li>
