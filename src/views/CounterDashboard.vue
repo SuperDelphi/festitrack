@@ -152,7 +152,7 @@ const subscribeToCount = () => {
 
 <template>
     <div class='flex flex-col items-center p-6 max-h-screen bg-white'>
-        <h1 class='text-3xl font-bold mb-8'>{{ userProfile?.Locations?.name || 'Lieu non assigné' }}</h1>
+        <h1 class='text-3xl font-bold mb-8 text-center'>{{ userProfile?.Locations?.name || 'Lieu non assigné' }}</h1>
 
         <template v-if='userProfile?.Locations'>
 
