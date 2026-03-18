@@ -24,7 +24,7 @@ onUnmounted(() => {
         <div id='popup' class='bg-white rounded-4xl p-6 w-11/12 sm:w-96 text-center justify-between flex flex-col'>
             <div>
                 <h2 class='text-2xl font-bold mb-4'>{{ title }}</h2>
-                <span>{{ message }}</span>
+                <span class='text-lg'>{{ message }}</span>
             </div>
             <div class='mt-6 flex gap-4 justify-center'>
                 <button @click="close" class='flex-1 py-1 px-8 flex flex-col items-center justify-center border-gray-300 border-2 rounded-[25px] active:scale-95 transition-all'>
