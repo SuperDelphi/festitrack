@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import minusIcon from '../assets/minus_icon.svg'
 import plusIcon from '../assets/plus_icon.svg'
+import mapsIcon from '../assets/maps_icon.svg'
 
 import { supabase } from '../supabase'
 import { ref, onMounted, onUnmounted } from 'vue'
@@ -156,9 +157,14 @@ const subscribeToCount = () => {
 
         <template v-if='userProfile?.Locations'>
 
-            <RouterLink to='/locations' class='flex-1 py-1 mb-6 px-8 flex flex-col items-center justify-center border-gray-300 border-2 rounded-[25px] active:scale-95 transition-all'>
-                <span class='text-xl font-bold'>Changer de lieu</span>
-            </RouterLink>
+            <div class='flex gap-2'>
+                <a :href='userProfile?.Locations?.maps_url' target='_blank' class='flex-1 mb-6 flex flex-col items-center justify-center border-gray-300 border-2 rounded-full active:scale-95 transition-all w-9 h-9'>
+                    <img class='w-4' :src='mapsIcon' />
+                </a>
+                <RouterLink to='/locations' class='py-1 mb-6 px-8 h-9 flex flex-col items-center justify-center border-gray-300 border-2 rounded-[25px] active:scale-95 transition-all'>
+                    <span class='text-xl font-bold'>Changer de lieu</span>
+                </RouterLink>
+            </div>
             
             <!-- Encart sur fond gris -->
             <div class='w-full max-w-sm p-8 rounded-[25px] bg-gray-100 flex justify-between items-center relative overflow-hidden'>
