@@ -60,6 +60,10 @@ async function incrementCount() {
     if (loading.value) return
     loading.value = true
 
+    if (navigator.vibrate) {
+        navigator.vibrate(50)
+    }
+
     try {
         if (!userProfile.value || !userProfile.value.Locations) {
             alert('Vous n\'avez pas de lieu assigné. Veuillez choisir un lieu dans votre profil.')

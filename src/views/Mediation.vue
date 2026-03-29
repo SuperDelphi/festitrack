@@ -51,6 +51,11 @@ onMounted(async () => {
                 <div class='w-full flex justify-center items-left flex-col'>
                     <div class='flex justify-between items-left w-full flex-col text-left'>
                         <span class='text-xl font-bold mb-4'>{{ work.title }}</span>
+                        <template v-if='work.setup_instructions'>
+                            <span class='text-lg font-bold mb-4'>Instructions de mise en place</span>
+                            <p class='text-lg mb-4' v-html='formatText(work.setup_instructions)'></p>
+                        </template>
+                        <span class='text-lg font-bold mb-4'>Résumé</span>
                         <div class='text-lg mb-4'>
                             <p class='text-[#88b3fc] font-bold'>{{ work.summary }}</p>
                         </div>
