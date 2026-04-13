@@ -13,11 +13,31 @@ const router = useRouter()
 
 const { userProfile, updateProfileLocation } = useAuth()
 const locations = ref<any[]>([])
+const yesterdayCount = ref(0)
+const todayCount = ref(0)
+const globalCount = ref(0)
 const loading = ref(false)
 
 const showPopUp = ref(false)
 const popUpMessage = ref('')
 const locId = ref<number | null>(null)
+
+async function getStatistics() {
+    try {
+        loading.value = true
+
+        const { data, error } = await supabase
+            .rpc('get_global_stats')
+
+        if (error) throw error
+
+        globalCount.value = data.total || 0
+        todayCount.value = data.today_total || 0
+        yesterdayCount.value = data.yesterday_total || 0
+    } finally {
+        loading.value = false
+    }
+}
 
 async function getLocations() {
     try {
@@ -78,6 +98,7 @@ function confirmPopUp() {
 
 onMounted(async () => {
     await getLocations();
+    await getStatistics();
 })
 
 </script>
@@ -86,7 +107,7 @@ onMounted(async () => {
     <PopUp v-if='showPopUp' title='Attention' :message='popUpMessage' :close='closePopUp' :action='confirmPopUp' />
     <div class='flex flex-col items-center p-6 max-h-screen bg-white'>
         <h1 class='text-3xl font-bold mb-1'>Sélection du lieu</h1>
-        <!-- <h2 class='text-xl text-gray-400 font-bold mb-8 uppercase'>{{ locations.length }} lieux disponibles</h2> -->
+        <h2 class='text-xl text-gray-400 font-bold text-center mt-8 uppercase'><span class='text-[#88b3fc]'>{{ yesterdayCount }}</span> visiteurs hier / <span class='text-[#88b3fc]'>{{ todayCount }}</span> visiteurs aujourd'hui / <span class='text-[#88b3fc]'>{{ globalCount }}</span> visiteurs au total en 2026.</h2>
     </div>
     <div>
         <ul class='max-w-md mx-auto p-6'>

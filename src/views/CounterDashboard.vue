@@ -12,6 +12,7 @@ const { userProfile } = useAuth()
 const currentCount = ref(0)
 const cumulateCount = ref(0)
 const loading = ref(true)
+const festivalActive = isFestivalActive()
 let realtimeChannel: any = null
 
 onMounted(async () => {
@@ -29,6 +30,14 @@ onUnmounted(() => {
         supabase.removeChannel(realtimeChannel)
     }
 })
+
+function isFestivalActive(): boolean {
+    const now = new Date()
+    const festivalStart = new Date('2024-03-20T00:00:00') // Date de début du festival
+    const festivalEnd = new Date('2024-04-07T23:59:59') // Date de fin du festival
+
+    return now >= festivalStart && now <= festivalEnd
+}
 
 async function fetchCurrentCount(locationId: number) {
     try {
@@ -170,40 +179,48 @@ const subscribeToCount = () => {
                 </RouterLink>
             </div>
             
-            <!-- Encart sur fond gris -->
-            <div class='w-full max-w-sm p-8 rounded-[25px] bg-gray-100 flex justify-between items-center relative overflow-hidden'>
-                <!-- Actuel -->
-                <div class='flex flex-col items-center flex-1'>
-                    <span class='font-bold'>Actuel</span>
-                    <span :class='"text-6xl font-bold my-1 " + (currentCount >= userProfile?.Locations?.max_capacity ? "text-red-500" : "text-[#2bb385]")'>{{ currentCount }}</span>
-                    <span class='font-bold'>/ {{ userProfile?.Locations?.max_capacity || 0 }}</span>
-                </div>
-                
-                <!-- Séparateur -->
-                <div class='w-px h-24 bg-black opacity-15 mx-4'></div>
+            <template v-if='festivalActive'>
+                <!-- Encart sur fond gris -->
+                <div class='w-full max-w-sm p-8 rounded-[25px] bg-gray-100 flex justify-between items-center relative overflow-hidden'>
+                    <!-- Actuel -->
+                    <div class='flex flex-col items-center flex-1'>
+                        <span class='font-bold'>Actuel</span>
+                        <span :class='"text-6xl font-bold my-1 " + (currentCount >= userProfile?.Locations?.max_capacity ? "text-red-500" : "text-[#2bb385]")'>{{ currentCount }}</span>
+                        <span class='font-bold'>/ {{ userProfile?.Locations?.max_capacity || 0 }}</span>
+                    </div>
+                    
+                    <!-- Séparateur -->
+                    <div class='w-px h-24 bg-black opacity-15 mx-4'></div>
 
-                <!-- Total jour -->
-                <div class='flex flex-col items-center flex-1'>
-                    <span class='font-bold'>Total jour</span>
-                    <span class='text-6xl font-bold my-1'>{{ cumulateCount || 0 }}</span>
-                    <span class='font-bold'>Cumulatif</span>
+                    <!-- Total jour -->
+                    <div class='flex flex-col items-center flex-1'>
+                        <span class='font-bold'>Total jour</span>
+                        <span class='text-6xl font-bold my-1'>{{ cumulateCount || 0 }}</span>
+                        <span class='font-bold'>Cumulatif</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Bouton d'ouverture/fermeture du lieu -->
-            <!-- <button v-if='userProfile?.Roles?.is_admin' class='w-full max-w-sm mt-8 py-2 border-2 border-red-300 bg-red-50 text-red-600 font-bold rounded-full hover:bg-red-100 active:scale-95 transition-all'>Déclarer la fermeture du lieu</button> -->
-        
-            <!-- Boutons d'action -->
-            <div class='flex w-full max-w-sm gap-4 mt-6'>
-                <button @click='decrementCount' class='flex-1 py-3 flex flex-col items-center justify-center border-2 border-black rounded-[25px] hover:bg-gray-50 active:scale-95 transition-all' :disabled="currentCount <= 0">
-                    <img :src='minusIcon' class='h-4' />
-                    <span class='text-xl font-bold'>Sortie</span>
-                </button>
-                <button @click='incrementCount' class='flex-1 py-6 flex flex-col items-center justify-center bg-[#4e5dff] text-white rounded-[25px] active:scale-95 transition-all'>
-                    <img :src="plusIcon" class='h-4' />
-                    <span class='text-xl font-bold'>Entrée</span>
-                </button>
-            </div>
+                <!-- Bouton d'ouverture/fermeture du lieu -->
+                <!-- <button v-if='userProfile?.Roles?.is_admin' class='w-full max-w-sm mt-8 py-2 border-2 border-red-300 bg-red-50 text-red-600 font-bold rounded-full hover:bg-red-100 active:scale-95 transition-all'>Déclarer la fermeture du lieu</button> -->
+            
+                <!-- Boutons d'action -->
+                <div class='flex w-full max-w-sm gap-4 mt-6'>
+                    <button @click='decrementCount' class='flex-1 py-3 flex flex-col items-center justify-center border-2 border-black rounded-[25px] hover:bg-gray-50 active:scale-95 transition-all' :disabled="currentCount <= 0">
+                        <img :src='minusIcon' class='h-4' />
+                        <span class='text-xl font-bold'>Sortie</span>
+                    </button>
+                    <button @click='incrementCount' class='flex-1 py-6 flex flex-col items-center justify-center bg-[#4e5dff] text-white rounded-[25px] active:scale-95 transition-all'>
+                        <img :src="plusIcon" class='h-4' />
+                        <span class='text-xl font-bold'>Entrée</span>
+                    </button>
+                </div>
+            </template>
+            <template v-else>
+                <div class='w-full max-w-sm p-8 rounded-[25px] bg-gray-100 flex justify-center items-center relative overflow-hidden'>
+                    <span class='text-center text-xl font-bold'>Le festival est clôturé !</span>
+                </div>
+            </template>
+            
         </template>
         <template v-else>
             <a href='/#/locations' class='flex-1 py-3 px-6 flex flex-col items-center justify-center border-2 border-black rounded-[25px] hover:bg-gray-50 active:scale-95 transition-all' :disabled="currentCount <= 0">
